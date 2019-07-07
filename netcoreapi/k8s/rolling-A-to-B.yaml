@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-a-deploy
+  labels:
+    app: api-a
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: api-a
+  template:
+    metadata:
+      labels:
+        app: api-a
+    spec:
+      containers:
+      - name: api-a
+        image: adamwu/netcoreapi:v1.8
+        ports:
+        - containerPort: 80
