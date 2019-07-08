@@ -21,3 +21,14 @@ spec:
         image: adamwu/netcoreapi:v1.8
         ports:
         - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /api/values
+            port: 80
+            httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 10
+          failureThreshold: 1

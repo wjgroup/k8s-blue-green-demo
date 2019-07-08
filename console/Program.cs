@@ -20,16 +20,16 @@ namespace console
         {
             while(true)
             {
-                _httpClient = new HttpClient{ Timeout = new TimeSpan(0, 0, 5) };
+                _httpClient = new HttpClient{ Timeout = new TimeSpan(0, 0, 10) };
 
                 var tasks = new List<Task>();
                 
-                tasks.Add(DoIt());
-                tasks.Add(DoIt());
-                tasks.Add(DoIt());
-                tasks.Add(DoIt());
-                tasks.Add(DoIt());
-                tasks.Add(DoIt());
+                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0]));
 
                 await Task.WhenAll(tasks);
 
@@ -37,11 +37,11 @@ namespace console
             }
         }
 
-        static async Task DoIt()
+        static async Task DoIt(string ip)
         {
             try
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://40.113.199.125/api/api/values");
+                var request = new HttpRequestMessage(HttpMethod.Get, $"http://{ip}/api/api/values");
                 
                 var response = await _httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
