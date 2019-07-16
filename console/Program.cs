@@ -24,16 +24,16 @@ namespace console
 
                 var tasks = new List<Task>();
                 
-                tasks.Add(DoIt(args[0]));
-                tasks.Add(DoIt(args[0]));
-                tasks.Add(DoIt(args[0]));
-                tasks.Add(DoIt(args[0]));
-                tasks.Add(DoIt(args[0]));
-                tasks.Add(DoIt(args[0]));
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
+                tasks.Add(DoIt(args[0])); await Task.Delay(100);
 
-                await Task.WhenAll(tasks);
+                //await Task.WhenAll(tasks);
 
-                await Task.Delay(1000);
+                await Task.Delay(100);
             }
         }
 
@@ -46,7 +46,7 @@ namespace console
                 var response = await _httpClient.SendAsync(request);
                 var content = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine($"{DateTime.Now} - {content}");
+                Console.WriteLine($"{DateTime.Now} - {response.StatusCode} - {content}");
             }
             catch(Exception ex)
             {

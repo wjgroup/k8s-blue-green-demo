@@ -1,15 +1,15 @@
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  api-b-mapping
+spec:
+  prefix: /api-b/
+  service: api-b-svc
+---
 apiVersion: v1
 kind: Service
 metadata:
   name: api-b-svc
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v1
-      kind:  Mapping
-      name:  api-b-mapping
-      prefix: /api-b/
-      service: api-b-svc
 spec:
   selector:
     app: api-b
