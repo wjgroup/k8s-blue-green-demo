@@ -1,0 +1,7 @@
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  api-mapping
+spec:
+  prefix: /api/
+  service: api-svc.apps

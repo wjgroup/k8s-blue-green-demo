@@ -40,11 +40,15 @@ $ kubectl get svc -o wide ambassador
 NAME         TYPE           CLUSTER-IP   EXTERNAL-IP     PORT(S)        AGE   SELECTOR
 ambassador   LoadBalancer   10.0.65.32   52.183.39.233   80:30958/TCP   36m   service=ambassador
 ```
+>Note: both the Ambassador and load balancer are deployed in default namespace. Deploying them to different namespaces requires extra config changes.
 
-## 4. Deploy 2 demo apps
+## 4. Deploy 2 demo apps in to `apps` namespace
 ```
-$ kubectl apply -f k8s/service-deploy-A.yaml
-$ kubectl apply -f k8s/service-deploy-B.yaml
+$ kubectl create namespace apps
+$ kubectl -n apps apply -f k8s/service-deploy-A.yaml
+$ kubectl -n apps apply -f k8s/mapping-A.yaml
+$ kubectl -n apps apply -f k8s/service-deploy-B.yaml
+$ kubectl -n apps apply -f k8s/mapping-B.yaml
 ```
 
 After deployed you should be able to use below the commands to access them
