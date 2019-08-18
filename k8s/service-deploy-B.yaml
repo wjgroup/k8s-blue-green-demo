@@ -6,9 +6,14 @@ spec:
   selector:
     app: api-b
   ports:
-  - protocol: TCP
+  - name: http
+    protocol: TCP
     port: 80
     targetPort: 80
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 443
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -28,6 +33,12 @@ spec:
     spec:
       containers:
       - name: api-b
-        image: adamwu/netcoreapi:v1.8
+        image: adamwu/netcoreapi:v1.9
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:80"

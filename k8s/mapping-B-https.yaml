@@ -1,7 +1,8 @@
 apiVersion: getambassador.io/v1
 kind:  Mapping
 metadata:
-  name:  api-b-http-mapping
+  name:  api-b-https-mapping
 spec:
   prefix: /api-b/
+  tls: true
   service: api-b-svc.apps

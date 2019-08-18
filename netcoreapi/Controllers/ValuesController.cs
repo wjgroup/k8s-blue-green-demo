@@ -16,7 +16,7 @@ namespace netcoreapi.Controllers
         {
             await Task.Delay(2000);
 
-            return new string[] { "api v1.7", DateTime.Now.Ticks.ToString(), Environment.MachineName };
+            return new string[] { this.Request.Scheme, "api v1.9", DateTimeOffset.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff"), Environment.MachineName };
         }
 
         // GET api/values/5

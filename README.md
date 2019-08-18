@@ -13,9 +13,10 @@ az aks get-credentials --resource-group <group_name> --name <cluster_name>
 kubectl version
 ```
 
-## 2. Deploy(install) Ambassador on cluster
+## 2. Deploy(install) Ambassador on cluster into separate namespace `ambassador`
 ```
-$ kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml
+$ kubectl create namespace ambassador
+$ kubectl -n ambassador apply -f k8s/ambassador-deploy-rbac.yaml
 service/ambassador-admin created
 clusterrole.rbac.authorization.k8s.io/ambassador created
 serviceaccount/ambassador created
@@ -29,18 +30,20 @@ customresourcedefinition.apiextensions.k8s.io/tlscontexts.getambassador.io creat
 customresourcedefinition.apiextensions.k8s.io/tracingservices.getambassador.io created
 ```
 
+>Above the yaml is a copy from [official site](https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml), the only change I made is for `clusterrolebinding.rbac.authorization.k8s.io/ambassador` to bing service account from namespace `ambassador` which we just created.
+
 ## 3. Create Ambassador load balancer
 ```
-$ kubectl apply -f https://raw.githubusercontent.com/wjgroup/k8s-ingress-demo/master/ambassador-demo/ambassador-loadbalancer.yaml
+$ kubectl -n ambassador apply -f k8s/ambassador-loadbalancer.yaml
 ```
 
-After than, keep running below the command till you see EXTERNAL-IP is generated
+After that, keep running below the command till you see EXTERNAL-IP is generated
 ```
-$ kubectl get svc -o wide ambassador
+$ kubectl -n ambassador get svc -o wide ambassador
 NAME         TYPE           CLUSTER-IP   EXTERNAL-IP     PORT(S)        AGE   SELECTOR
 ambassador   LoadBalancer   10.0.65.32   52.183.39.233   80:30958/TCP   36m   service=ambassador
 ```
->Note: both the Ambassador and load balancer are deployed in default namespace. Deploying them to different namespaces requires extra config changes.
+>Note: both the Ambassador and load balancer need to be deployed into same namespace.
 
 ## 4. Deploy 2 demo apps in to `apps` namespace
 ```
@@ -63,3 +66,18 @@ $ kubectl apply -f k8s/mapping-A-to-B.yaml
 $ curl http://<external ip>/api/api/values
 ```
 
+## 6. Enabled HTTPS
+
+Please follow [this article](https://www.getambassador.io/user-guide/tls-termination/) to enable HTTPS for ambassador
+
+Basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context
+```
+$ openssl genrsa -out key.pem 2048
+$ openssl req -x509 -key key.pem -out cert.pem -days 365 -subj '/CN=ambassador-cert'
+$ kubectl -n ambassador create secret tls tls-cert --cert=cert.pem --key=key.pem
+$ kubectl -n ambassador apply -f k8s/tls-context.yaml
+``` 
+
+> The secret and tls context need to be create in the same namespace ambassador deployed.
+
+## 7. To be continued ...
