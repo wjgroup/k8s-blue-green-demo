@@ -70,7 +70,7 @@ $ curl http://<external ip>/api/api/values
 
 ## 6. Enabled HTTPS
 
-Please read [the office article](https://www.getambassador.io/user-guide/tls-termination/) for full details of enable HTTPS for ambassador. To summarise, basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context for ambassador to consume the secret
+Please read [the official article](https://www.getambassador.io/user-guide/tls-termination/) for full details of enable HTTPS for ambassador. To summarise, basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context for ambassador to consume the secret
 ```
 $ openssl genrsa -out key.pem 2048
 $ openssl req -x509 -key key.pem -out cert.pem -days 365 -subj '/CN=ambassador-cert'
