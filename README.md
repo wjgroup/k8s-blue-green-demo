@@ -77,8 +77,8 @@ $ openssl req -x509 -key key.pem -out cert.pem -days 365 -subj '/CN=ambassador-c
 $ kubectl -n apps create secret tls tls-cert --cert=cert.pem --key=key.pem
 $ kubectl -n apps apply -f k8s/tls-context.yaml
 ```
->Be aware, once enabled HTTPS the http port will not work.
+>Once enabled HTTPS the http port will not work.
 
 >If you are using MacOS Mojave then above the `openssl req -x509` command may not work, you can then use the cert.pem and key.pem from the k8s folder directly. 
 
->Be aware the secret and tls context is not deployed into namespace `ambassador`, this is to demo one shared ambassador deployment serving multiple application namespaces.
+>The secret and tls context is not deployed into namespace `ambassador`, this is to demo one shared ambassador deployment serving multiple application namespaces.
