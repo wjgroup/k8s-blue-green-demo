@@ -70,7 +70,7 @@ $ curl http://<external ip>/api/api/values
 
 ## 6. Enabled HTTPS
 
-Please read [this article](https://www.getambassador.io/user-guide/tls-termination/) for full details of enable HTTPS for ambassador. To summarise, basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context for ambassador to consume the secret
+Please read [the office article](https://www.getambassador.io/user-guide/tls-termination/) for full details of enable HTTPS for ambassador. To summarise, basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context for ambassador to consume the secret
 ```
 $ openssl genrsa -out key.pem 2048
 $ openssl req -x509 -key key.pem -out cert.pem -days 365 -subj '/CN=ambassador-cert'
@@ -78,6 +78,6 @@ $ kubectl -n apps create secret tls tls-cert --cert=cert.pem --key=key.pem
 $ kubectl -n apps apply -f k8s/tls-context.yaml
 ``` 
 
-> Be aware the secret and tls context is not deployed into namespace `ambassador`, this is to demo one shared ambassador deployment to serving multiple application namespaces.
+> Be aware the secret and tls context is not deployed into namespace `ambassador`, this is to demo one shared ambassador deployment serving multiple application namespaces.
 
 ## 7. To be continued ...
