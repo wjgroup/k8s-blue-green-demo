@@ -4,4 +4,4 @@ metadata:
   name: tls-cxt
 spec:
   hosts: ["*"]
-  secret: tls-cert
+  secret: tls-cert.apps

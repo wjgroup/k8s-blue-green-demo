@@ -30,7 +30,7 @@ customresourcedefinition.apiextensions.k8s.io/tlscontexts.getambassador.io creat
 customresourcedefinition.apiextensions.k8s.io/tracingservices.getambassador.io created
 ```
 
->Above the yaml is a copy from [official site](https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml), the only change I made is for `clusterrolebinding.rbac.authorization.k8s.io/ambassador` to bing service account from namespace `ambassador` which we just created.
+>Above the yaml is a copy from [official site](https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml), the only change I made is for `clusterrolebinding.rbac.authorization.k8s.io/ambassador` to bind service account from namespace `ambassador` which we just created.
 
 ## 3. Create Ambassador load balancer
 ```
@@ -54,6 +54,8 @@ $ kubectl -n apps apply -f k8s/service-deploy-B.yaml
 $ kubectl -n apps apply -f k8s/mapping-B.yaml
 ```
 
+>There are 2 mapping yamls: `mapping-B.yaml` and `mapping-B-https.yaml`, the `mapping-B-https.yaml` forces ambassador to originate HTTPS connection with service/pods, which will be used when later we try out HTTPS related features. 
+
 After deployed you should be able to use below the commands to access them
 ```
 $ curl http://<external ip>/api/api/values
@@ -68,16 +70,14 @@ $ curl http://<external ip>/api/api/values
 
 ## 6. Enabled HTTPS
 
-Please follow [this article](https://www.getambassador.io/user-guide/tls-termination/) to enable HTTPS for ambassador
-
-Basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context
+Please read [this article](https://www.getambassador.io/user-guide/tls-termination/) for full details of enable HTTPS for ambassador. To summarise, basically you need run below the command lines to create private key and cert, and then create tls secret on it and create tls context for ambassador to consume the secret
 ```
 $ openssl genrsa -out key.pem 2048
 $ openssl req -x509 -key key.pem -out cert.pem -days 365 -subj '/CN=ambassador-cert'
-$ kubectl -n ambassador create secret tls tls-cert --cert=cert.pem --key=key.pem
-$ kubectl -n ambassador apply -f k8s/tls-context.yaml
+$ kubectl -n apps create secret tls tls-cert --cert=cert.pem --key=key.pem
+$ kubectl -n apps apply -f k8s/tls-context.yaml
 ``` 
 
-> The secret and tls context need to be create in the same namespace ambassador deployed.
+> Be aware the secret and tls context is not deployed into namespace `ambassador`, this is to demo one shared ambassador deployment to serve multiple application namespaces.
 
 ## 7. To be continued ...
