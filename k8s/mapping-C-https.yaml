@@ -1,0 +1,10 @@
+apiVersion: getambassador.io/v1
+kind:  Mapping
+metadata:
+  name:  web-https-mapping
+spec:
+  prefix: /app/v1/
+  tls: true
+  service: web-svc.apps
+  rewrite: /app/v1/
+  case_sensitive: false
